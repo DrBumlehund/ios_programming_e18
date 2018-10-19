@@ -1,0 +1,23 @@
+{
+  "name": "ios_server",
+  "version": "1.0.0",
+  "description": "server for the ios project",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DrBumlehund/ios_programming_e18.git"
+  },
+  "author": "drbumlehund",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DrBumlehund/ios_programming_e18/issues"
+  },
+  "homepage": "https://github.com/DrBumlehund/ios_programming_e18#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  }
+}
