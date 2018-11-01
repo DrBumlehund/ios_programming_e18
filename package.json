@@ -4,6 +4,7 @@
   "description": "server for the ios project",
   "main": "app.js",
   "scripts": {
+    "test": "nodemon -i db/ app.js",
     "start": "node app.js"
   },
   "repository": {
@@ -18,6 +19,7 @@
   "homepage": "https://github.com/DrBumlehund/ios_programming_e18#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "sqlite3": "^4.0.3"
   }
 }
