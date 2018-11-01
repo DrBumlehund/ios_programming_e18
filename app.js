@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.post('/score', (req, res) => {
     db.save_score(req.body)
     .catch((reason) =>{
-        res.statusCode(400)
+        res.statusCode = 400
         res.send(reason)
     })
     .then((result) => {
@@ -24,7 +24,7 @@ app.post('/score', (req, res) => {
 app.get('/score', (req, res) => {
     db.test_db_all_scores()
     .catch((reason) =>{
-        res.statusCode(400)
+        res.statusCode = 400
         res.send(reason)
     })
     .then((result) => {
@@ -36,7 +36,7 @@ app.get('/leaderboard', (req, res) => {
     var offset = req.query.offset || 0;
     db.get_global_leaderboard(offset)
     .catch((reason) =>{
-        res.statusCode(400)
+        res.statusCode = 400
         res.send(reason)
     })
     .then((result) => {
@@ -49,7 +49,7 @@ app.get('/leaderboard/local', (req, res) => {
     var location = req.query.location;
     db.get_local_leaderboard(offset, location)
     .catch((reason) =>{
-        res.statusCode(400)
+        res.statusCode = 400
         res.send(reason)
     })
     .then((result) => {
@@ -62,7 +62,7 @@ app.get('/leaderboard/phone', (req, res) => {
     var phone = req.query.phone;
     db.get_phone_leaderboard(offset, phone)
     .catch((reason) =>{
-        res.statusCode(400)
+        res.statusCode = 400
         res.send(reason)
     })
     .then((result) => {

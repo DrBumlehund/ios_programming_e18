@@ -4,27 +4,29 @@ const db_path = './db/test.db';
 const table_name_scores = 'scores';
 const table_name_names = 'names';
 
+if (!fs.existsSync(db_path)) {
+    fs.mkdirSync('./db/');
+    fs.writeFileSync(db_path, '');
+}
+
+open_db().then((db) => {
+    db.run(`CREATE TABLE IF NOT EXISTS ${table_name_scores}(id INTEGER PRIMARY KEY AUTOINCREMENT, device_token TEXT, height REAL, score REAL, location TEXT, time INTEGER)`);
+    db.run(`CREATE TABLE IF NOT EXISTS ${table_name_names}(device_token TEXT UNIQUE PRIMARY KEY, name TEXT, phone_type TEXT)`);
+})
+
 function open_db() {
     return new Promise((resolve, reject) => {
-        new Promise((resolve1, reject1) => {
-            if (!fs.existsSync(db_path)) {
-                fs.writeFileSync(db_path, '');
+        var db = new sqlite3.Database(db_path, sqlite3.OPEN_READWRITE, (err) => {
+            if (err) {
+                console.error(err.message);
+                reject(err.message);
             }
-            resolve1();
-        }).then(() => {
-            let db = new sqlite3.Database(db_path, sqlite3.OPEN_READWRITE, (err) => {
-                if (err) {
-                    console.error(err.message);
-                    reject(err.message);
-                }
-                console.log('Connected to the database.');
-            });
+            console.log('Connected to the database.');
+        });
 
 
-            db.run(`CREATE TABLE IF NOT EXISTS ${table_name_scores}(id INTEGER PRIMARY KEY AUTOINCREMENT, device_token TEXT, height REAL, score REAL, location TEXT, time INTEGER)`);
-            db.run(`CREATE TABLE IF NOT EXISTS ${table_name_names}(device_token TEXT UNIQUE PRIMARY KEY, name TEXT, phone_type TEXT)`);
-            resolve(db);
-        })
+
+        resolve(db);
     });
 }
 
@@ -99,7 +101,7 @@ module.exports.get_global_leaderboard = (offset) => {
     });
 }
 
-module.exports.get_local_leaderboard = (offset, location ) => {
+module.exports.get_local_leaderboard = (offset, location) => {
 
     return new Promise(async (resolve, reject) => {
         let db = await open_db();
