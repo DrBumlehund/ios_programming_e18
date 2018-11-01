@@ -1,0 +1,299 @@
+{
+	"info": {
+		"_postman_id": "75bdb618-51ba-43f4-847a-e663b2abdd7a",
+		"name": "ios_server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "scores",
+			"item": [
+				{
+					"name": "post score",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b5fdead2-d5b3-4feb-9b9a-16faaeb1136e",
+								"exec": [
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "cde7fdba-5ea1-4c53-b41d-062a000493c3",
+								"exec": [
+									"pm.environment.set(\"height\", Math.random() * 50)",
+									"pm.environment.set(\"score\", pm.environment.get(\"height\") * 10 + _.random(1, 100))",
+									"// pm.environment.set(\"lat\", Math.random() * _.random(-90,90))",
+									"// pm.environment.set(\"lon\", Math.random() * _.random(-180,180))",
+									"",
+									"",
+									"",
+									"var persons = [{\"name\": \"Hansi Hinterseer\", \"did\": \"12houioipn21oni\", \"pt\":\"ipxs\"}, ",
+									"{\"name\": \"Han Solo\", \"did\": \"43208hfih9032\", \"pt\":\"ip6se\"}, ",
+									"{\"name\": \"Chewbacca\", \"did\": \"23418088dl2\", \"pt\":\"ip5s\"}, ",
+									"{\"name\": \"Wario\", \"did\": \"ji12jipmp2+\", \"pt\":\"ip8s\"}, ",
+									"{\"name\": \"Suzuki bob\", \"did\": \"320åoml20+221\", \"pt\":\"ip8s\"}, ",
+									"{\"name\": \"Cancer hans\", \"did\": \"das01j1p2123zz\", \"pt\":\"ipxs\"}, ",
+									"{\"name\": \"Ebola John\", \"did\": \"s108hien12l3\", \"pt\":\"ip5s\"}, ",
+									"{\"name\": \"Henning Regnorm\", \"did\": \"2198ohinekl12\", \"pt\":\"ip6se\"}, ",
+									"{\"name\": \"Søren Slyngel\", \"did\": \"1987u2on12\", \"pt\":\"ip7\"}, ",
+									"{\"name\": \"Simon Sølvarm\", \"did\": \"129y87hoiu2n1lk2\", \"pt\":\"ip7\"}, ",
+									"{\"name\": \"Turbo Tom\", \"did\": \"179u2on211\", \"pt\":\"ip7s\"}, ",
+									"{\"name\": \"Hvalen Valborg\", \"did\": \"8y10hip2onk\", \"pt\":\"ipx\"}]",
+									"",
+									"var i = _.random(0,persons.length-1);",
+									"",
+									"pm.environment.set(\"name\", persons[i].name)",
+									"pm.environment.set(\"device_token\", persons[i].did)",
+									"pm.environment.set(\"phone_type\", persons[i].pt)",
+									"",
+									"",
+									"",
+									"var locations = [\"Sønderjylland\", \"Vestjylland\", \"Midtjylland\", \"Nordjylland\", \"Fyn\", \"Midtsjælland\", \"Lolland-Falster\", \"Hovedstaden\", \"Nordsjælland\", \"Bornholm\"]",
+									"",
+									"var j = _.random(0,locations.length-1);",
+									"",
+									"pm.environment.set(\"location\", locations[j])",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n\t\"name\" : \"{{name}}\", \n\t\"height\": {{height}}, \n\t\"score\" : {{score}}, \n\t\"location\": \"{{location}}\", \n\t\"device_token\" :\"{{device_token}}\", \n\t\"phone_type\" : \"{{phone_type}}\" \n}"
+						},
+						"url": {
+							"raw": "http://localhost:9988/score",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9988",
+							"path": [
+								"score"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "scores",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f3d8eb1e-4586-4ed5-88c6-6b13b4638242",
+								"exec": [
+									"// example using pm.response.to.have\r",
+									"pm.test(\"response is ok\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// example using pm.response.to.be*\r",
+									"pm.test(\"response must be valid and have a body\", function () {\r",
+									"     // assert that the status code is 200\r",
+									"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants\r",
+									"     // assert that the response has a valid JSON body\r",
+									"     pm.response.to.be.withBody;\r",
+									"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:9988/score",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9988",
+							"path": [
+								"score"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "leaderboards",
+			"item": [
+				{
+					"name": "global leaderboard",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ecbd879a-418e-4ea1-8bd1-a2e20a3b5915",
+								"exec": [
+									"// example using pm.response.to.have\r",
+									"pm.test(\"response is ok\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// example using pm.response.to.be*\r",
+									"pm.test(\"response must be valid and have a body\", function () {\r",
+									"     // assert that the status code is 200\r",
+									"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants\r",
+									"     // assert that the response has a valid JSON body\r",
+									"     pm.response.to.be.withBody;\r",
+									"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:9988/leaderboard",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9988",
+							"path": [
+								"leaderboard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "phone leaderboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:9988/leaderboard/phone?phone={{phone_type}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9988",
+							"path": [
+								"leaderboard",
+								"phone"
+							],
+							"query": [
+								{
+									"key": "phone",
+									"value": "{{phone_type}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "local leaderboard",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ad54bf60-8aee-4a64-8668-8a64d23b02fb",
+								"exec": [
+									"// example using pm.response.to.have\r",
+									"pm.test(\"response is ok\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// example using pm.response.to.be*\r",
+									"pm.test(\"response must be valid and have a body\", function () {\r",
+									"     // assert that the status code is 200\r",
+									"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants\r",
+									"     // assert that the response has a valid JSON body\r",
+									"     pm.response.to.be.withBody;\r",
+									"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1acc1bfe-9325-4834-a3df-64006b067048",
+								"exec": [
+									"var locations = [\"Sønderjylland\", \"Vestjylland\", \"Midtjylland\", \"Nordjylland\", \"Fyn\", \"Midtsjælland\", \"Lolland-Falster\", \"Hovedstaden\", \"Nordsjælland\", \"Bornholm\"]",
+									"",
+									"var j = _.random(0,locations.length-1);",
+									"",
+									"pm.environment.set(\"location\", locations[j])",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:9988/leaderboard/local?location={{location}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9988",
+							"path": [
+								"leaderboard",
+								"local"
+							],
+							"query": [
+								{
+									"key": "location",
+									"value": "{{location}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
