@@ -23,9 +23,6 @@ function open_db() {
             }
             console.log('Connected to the database.');
         });
-
-
-
         resolve(db);
     });
 }
@@ -35,13 +32,13 @@ module.exports.save_score = (score) => {
         let db = await open_db();
 
         db.run(`INSERT INTO ${table_name_scores}(device_token, height, score, location, time) 
-                VALUES('${score.device_token}', ${score.height}, ${score.score}, '${score.location}', strftime('%s','now'))`,
+                VALUES('${score.device_token}',  ${Number((score.height).toFixed(2))}, ${Number((score.score).toFixed(2))}, '${score.location}', strftime('%s','now'))`,
             (err) => {
                 if (err) {
                     console.error(table_name_scores, ":", err);
                     reject(err);
                 } else {
-                    console.log('successfully inserted scores data', score);
+                    console.log(`successfully inserted VALUES('${score.device_token}', ${Number((score.height).toFixed(2))}, ${Number((score.score).toFixed(2))}, '${score.location}') into ${table_name_scores}`);
                 }
             });
 
@@ -52,7 +49,7 @@ module.exports.save_score = (score) => {
                     console.error(table_name_names, ":", err);
                     reject(err);
                 } else {
-                    console.log('successfully inserted scores data', score);
+                    console.log(`successfully inserted VALUES('${score.device_token}', '${score.name}', '${score.phone_type}') into ${table_name_names}`);
                 }
             });
 
