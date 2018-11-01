@@ -35,7 +35,8 @@
 									"",
 									"",
 									"",
-									"var persons = [{\"name\": \"Hansi Hinterseer\", \"did\": \"12houioipn21oni\", \"pt\":\"ipxs\"}, ",
+									"var persons = [",
+									"{\"name\": \"Hansi Hinterseer\", \"did\": \"12houioipn21oni\", \"pt\":\"ipxs\"}, ",
 									"{\"name\": \"Han Solo\", \"did\": \"43208hfih9032\", \"pt\":\"ip6se\"}, ",
 									"{\"name\": \"Chewbacca\", \"did\": \"23418088dl2\", \"pt\":\"ip5s\"}, ",
 									"{\"name\": \"Wario\", \"did\": \"ji12jipmp2+\", \"pt\":\"ip8s\"}, ",
@@ -43,7 +44,7 @@
 									"{\"name\": \"Cancer hans\", \"did\": \"das01j1p2123zz\", \"pt\":\"ipxs\"}, ",
 									"{\"name\": \"Ebola John\", \"did\": \"s108hien12l3\", \"pt\":\"ip5s\"}, ",
 									"{\"name\": \"Henning Regnorm\", \"did\": \"2198ohinekl12\", \"pt\":\"ip6se\"}, ",
-									"{\"name\": \"Søren Slyngel\", \"did\": \"1987u2on12\", \"pt\":\"ip7\"}, ",
+									"{\"name\": \"Robuste Ritta\", \"did\": \"1987u2on12\", \"pt\":\"ip7\"}, ",
 									"{\"name\": \"Simon Sølvarm\", \"did\": \"129y87hoiu2n1lk2\", \"pt\":\"ip7\"}, ",
 									"{\"name\": \"Turbo Tom\", \"did\": \"179u2on211\", \"pt\":\"ip7s\"}, ",
 									"{\"name\": \"Hvalen Valborg\", \"did\": \"8y10hip2onk\", \"pt\":\"ipx\"}]",
@@ -82,10 +83,10 @@
 							"raw": "{ \n\t\"name\" : \"{{name}}\", \n\t\"height\": {{height}}, \n\t\"score\" : {{score}}, \n\t\"location\": \"{{location}}\", \n\t\"device_token\" :\"{{device_token}}\", \n\t\"phone_type\" : \"{{phone_type}}\" \n}"
 						},
 						"url": {
-							"raw": "http://localhost:9988/score",
+							"raw": "http://{{url}}:9988/score",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{url}}"
 							],
 							"port": "9988",
 							"path": [
@@ -129,10 +130,10 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:9988/score",
+							"raw": "http://{{url}}:9988/score",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{url}}"
 							],
 							"port": "9988",
 							"path": [
@@ -181,10 +182,10 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:9988/leaderboard",
+							"raw": "http://{{url}}:9988/leaderboard",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{url}}"
 							],
 							"port": "9988",
 							"path": [
@@ -204,10 +205,10 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:9988/leaderboard/phone?phone={{phone_type}}",
+							"raw": "http://{{url}}:9988/leaderboard/phone?phone={{phone_type}}",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{url}}"
 							],
 							"port": "9988",
 							"path": [
@@ -273,10 +274,10 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:9988/leaderboard/local?location={{location}}",
+							"raw": "http://{{url}}:9988/leaderboard/local?offset=0&location={{location}}",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{url}}"
 							],
 							"port": "9988",
 							"path": [
@@ -284,6 +285,10 @@
 								"local"
 							],
 							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
 								{
 									"key": "location",
 									"value": "{{location}}"

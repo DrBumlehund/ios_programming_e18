@@ -31,30 +31,50 @@ module.exports.save_score = (score) => {
     return new Promise(async (resolve, reject) => {
         let db = await open_db();
 
-        db.run(`INSERT INTO ${table_name_scores}(device_token, height, score, location, time) 
-                VALUES('${score.device_token}',  ${Number((score.height).toFixed(2))}, ${Number((score.score).toFixed(2))}, '${score.location}', strftime('%s','now'))`,
-            (err) => {
-                if (err) {
-                    console.error(table_name_scores, ":", err);
-                    reject(err);
-                } else {
-                    console.log(`successfully inserted VALUES('${score.device_token}', ${Number((score.height).toFixed(2))}, ${Number((score.score).toFixed(2))}, '${score.location}') into ${table_name_scores}`);
-                }
-            });
+        new Promise((resolve1, reject1) => {
+            db.get(`SELECT score 
+                    FROM ${table_name_scores} 
+                    WHERE device_token = '${score.device_token}' 
+                    ORDER BY time DESC`,
+                (err, row) => {
+                    if (err) {
+                        console.error(err)
+                        reject(err)
+                    } else {
+                        score.score = (score.height + (0.25 * (row != null ? row.score : 0)));
+                        resolve1(score.score);
+                    }
+                })
+        })
+            .catch((reason) => { console.log(reason) })
+            .then(() => {
 
-        db.run(`INSERT OR IGNORE INTO ${table_name_names}(device_token, name, phone_type) 
-                VALUES('${score.device_token}', '${score.name}', '${score.phone_type}')`,
-            (err) => {
-                if (err) {
-                    console.error(table_name_names, ":", err);
-                    reject(err);
-                } else {
-                    console.log(`successfully inserted VALUES('${score.device_token}', '${score.name}', '${score.phone_type}') into ${table_name_names}`);
-                }
-            });
 
-        db.close();
-        resolve("sucess");
+                db.run(`INSERT INTO ${table_name_scores}(device_token, height, score, location, time) 
+        VALUES('${score.device_token}',  ${Number((score.height).toFixed(2))}, ${Number(score.score).toFixed(2)}, '${score.location}', strftime('%s','now'))`,
+                    (err) => {
+                        if (err) {
+                            console.error(table_name_scores, ":", err);
+                            reject(err);
+                        } else {
+                            console.log(`successfully inserted VALUES('${score.device_token}', ${Number((score.height).toFixed(2))}, ${Number((score.score).toFixed(2))}, '${score.location}') into ${table_name_scores}`);
+                        }
+                    });
+
+                db.run(`INSERT OR IGNORE INTO ${table_name_names}(device_token, name, phone_type) 
+        VALUES('${score.device_token}', '${score.name}', '${score.phone_type}')`,
+                    (err) => {
+                        if (err) {
+                            console.error(table_name_names, ":", err);
+                            reject(err);
+                        } else {
+                            console.log(`successfully inserted VALUES('${score.device_token}', '${score.name}', '${score.phone_type}') into ${table_name_names}`);
+                        }
+                    });
+
+                db.close();
+                resolve("sucess");
+            })
     });
 }
 
@@ -140,4 +160,26 @@ module.exports.get_phone_leaderboard = (offset, phone_type) => {
             });
         db.close();
     });
+}
+
+module.exports.update_name = (device_token, new_name) => {
+
+    return new Promise(async (resolve, reject) => {
+        let db = await open_db();
+
+        db.run(`UPDATE ${table_name_names} 
+                SET name = '${new_name}' 
+                WHERE device_type = '${device_token}'`,
+            (err) => {
+                if (err) {
+                    console.error(err);
+                    reject(err);
+                } else {
+                    console.log(`Successfully updated name of user with device_token to '${new_name}'`);
+                    resolve('Success');
+                }
+            });
+
+        db.close();
+    })
 }
