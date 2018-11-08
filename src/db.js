@@ -190,7 +190,7 @@ module.exports.update_name = (device_token, new_name) => {
 }
 
 module.exports.get_last_throws_for_user = (device_token, n) => {
-    var n = n || 15;
+    var n = n || 0;
     return new Promise(async (resolve, reject) => {
         let db = await open_db();
 
@@ -198,7 +198,7 @@ module.exports.get_last_throws_for_user = (device_token, n) => {
                 FROM '${table_name_scores}'
                 WHERE device_token = '${device_token}'
                 ORDER BY time DESC
-                LIMIT ${n}`,
+                ${(n === 0 ? "" : 'LIMIT ' + n)}`,
             (err, rows) => {
                 if (err) {
                     reject(err);
