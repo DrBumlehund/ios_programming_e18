@@ -7,7 +7,7 @@ var achievements = {
 
 module.exports.check = (score) => {
     return new Promise(async (resolve, reject) => {
-        var completed = { achievements: [], time: Date.now() }
+        var completed = { achievements: [], time: Date.now(), score: score.score.toFixed(2)}
         if (!score) reject("no score was given...")
         achievements.heights.forEach(achievement => {
             if (score.height >= achievement.h) {
@@ -16,7 +16,6 @@ module.exports.check = (score) => {
         });
 
         var last_five = await db.get_last_throws_for_user(score.device_token, 15);
-        console.log(last_five);
 
         for (var achievement of achievements.consecutive) {
             var throws = [];

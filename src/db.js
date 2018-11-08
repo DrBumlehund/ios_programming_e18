@@ -77,7 +77,6 @@ module.exports.save_score = (score) => {
 
                 db.close();
                 achievements_checker.check(score).then((achievements) => {
-                    achievements.score = score.score
                     resolve(achievements);
                 })
             })
