@@ -3,9 +3,12 @@ const fs = require('fs');
 const db_path = './db/test.db';
 const table_name_scores = 'scores';
 const table_name_names = 'names';
+const achievements_checker = require('./achievements_checker.js');
+
+var phone_types = { 'iPhone 4': 1.06, 'iPhone 4s': 1.11, 'iPhone 5': 1.17, 'iPhone 5c': 1.22, 'iPhone 5s': 1.28, 'iPhone 6': 1.33, 'iPhone 6 Plus': 1.39, 'iPhone 6s': 1.44, 'iPhone 6s Plus': 1.50, 'iPhone 7': 1.56, 'iPhone 7 Plus': 1.61, 'iPhone SE': 1.67, 'iPhone 8': 1.72, 'iPhone 8 Plus': 1.78, 'iPhone X': 1.83, 'iPhone XS': 1.89, 'iPhone XS Max': 1.94, 'iPhone XR': 2.00, 'iPad 2': 2.06, 'iPad 3': 2.12, 'iPad 4': 2.18, 'iPad Air': 2.24, 'iPad Air 2': 2.29, 'iPad 5': 2.35, 'iPad 6': 2.41, 'iPad Mini': 2.47, 'iPad Mini 2': 2.53, 'iPad Mini 3': 2.59, 'iPad Mini 4': 2.65, 'iPad Pro (9.7-inch)': 2.71, 'iPad Pro (12.9-inch)': 2.76, 'iPad Pro (12.9-inch) (2nd generation)': 2.82, 'iPad Pro (10.5-inch)': 2.88, 'iPad Pro (11-inch)': 2.94, 'iPad Pro (12.9-inch) (3rd generation)': 3.00 }
 
 if (!fs.existsSync(db_path)) {
-    fs.mkdirSync('./db/');
+    if (!fs.existsSync("./db/")) fs.mkdirSync('./db/');
     fs.writeFileSync(db_path, '');
 }
 
@@ -41,7 +44,7 @@ module.exports.save_score = (score) => {
                         console.error(err)
                         reject(err)
                     } else {
-                        score.score = (score.height + (0.25 * (row != null ? row.score : 0)));
+                        score.score = (score.height + (0.25 * (row != null ? row.score : 0))) * phone_types[score.phone_type];
                         resolve1(score.score);
                     }
                 })
@@ -73,7 +76,10 @@ module.exports.save_score = (score) => {
                     });
 
                 db.close();
-                resolve("sucess");
+                achievements_checker.check(score).then((achievements) => {
+                    achievements.score = score.score
+                    resolve(achievements);
+                })
             })
     });
 }
@@ -102,7 +108,7 @@ module.exports.get_global_leaderboard = (offset) => {
     return new Promise(async (resolve, reject) => {
         let db = await open_db();
 
-        db.all(`SELECT * FROM '${table_name_scores}' NATURAL JOIN '${table_name_names}'
+        db.all(`SELECT height, score, name, phone_type FROM '${table_name_scores}' NATURAL JOIN '${table_name_names}'
                 ORDER BY score DESC
                 LIMIT 100 OFFSET ${offset}`,
             (err, rows) => {
@@ -123,7 +129,7 @@ module.exports.get_local_leaderboard = (offset, location) => {
     return new Promise(async (resolve, reject) => {
         let db = await open_db();
 
-        db.all(`SELECT * FROM '${table_name_scores}' NATURAL JOIN '${table_name_names}'
+        db.all(`SELECT height, score, name, phone_type FROM '${table_name_scores}' NATURAL JOIN '${table_name_names}'
                 WHERE location = '${location}'
                 ORDER BY score DESC
                 LIMIT 100 OFFSET ${offset}`,
@@ -145,7 +151,7 @@ module.exports.get_phone_leaderboard = (offset, phone_type) => {
     return new Promise(async (resolve, reject) => {
         let db = await open_db();
 
-        db.all(`SELECT * FROM '${table_name_scores}' NATURAL JOIN '${table_name_names}'
+        db.all(`SELECT height, score, name, phone_type FROM '${table_name_scores}' NATURAL JOIN '${table_name_names}'
                 WHERE phone_type = '${phone_type}'
                 ORDER BY score DESC
                 LIMIT 100 OFFSET ${offset}`,
@@ -176,10 +182,31 @@ module.exports.update_name = (device_token, new_name) => {
                     reject(err);
                 } else {
                     console.log(`Successfully updated name of user with device_token to '${new_name}'`);
-                    resolve('Success');
+                    resolve('Successfully changed name to ' + new_name);
                 }
             });
 
         db.close();
     })
+}
+
+module.exports.get_last_throws_for_user = (device_token, n) => {
+    var n = n || 15;
+    return new Promise(async (resolve, reject) => {
+        let db = await open_db();
+
+        db.all(`SELECT height
+                FROM '${table_name_scores}'
+                WHERE device_token = '${device_token}'
+                ORDER BY time DESC
+                LIMIT ${n}`,
+            (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows);
+                }
+            });
+        db.close();
+    });
 }
