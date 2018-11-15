@@ -62,7 +62,7 @@ router.get('/leaderboard/phone/:phone', (req, res) => {
     });
 });
 
-router.get('/leaderboard/persnal/:device_token', (req, res) => {
+router.get('/leaderboard/personal/:device_token', (req, res) => {
     var offset = req.query.offset || 0;
     var device_token = req.params.device_token;
     db.get_personal_leaderboard(offset, device_token)
