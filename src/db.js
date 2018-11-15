@@ -174,7 +174,7 @@ module.exports.update_name = (device_token, new_name) => {
 
         db.run(`UPDATE ${table_name_names} 
                 SET name = '${new_name}' 
-                WHERE device_type = '${device_token}'`,
+                WHERE device_token = '${device_token}'`,
             (err) => {
                 if (err) {
                     console.error(err);
