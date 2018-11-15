@@ -167,6 +167,28 @@ module.exports.get_phone_leaderboard = (offset, phone_type) => {
     });
 }
 
+module.exports.get_personal_leaderboard = (offset, device_token) => {
+
+    return new Promise(async (resolve, reject) => {
+        let db = await open_db();
+
+        db.all(`SELECT height, score, name, phone_type FROM '${table_name_scores}' NATURAL JOIN '${table_name_names}'
+                WHERE device_token = '${device_token}'
+                ORDER BY score DESC
+                LIMIT 100 OFFSET ${offset}`,
+            (err, rows) => {
+                if (err) {
+                    console.error(err);
+                    reject(err);
+                } else {
+                    console.log(`Successfully retrieved ${rows.length} scores with device_token ${device_token}`);
+                    resolve(rows);
+                }
+            });
+        db.close();
+    });
+}
+
 module.exports.update_name = (device_token, new_name) => {
 
     return new Promise(async (resolve, reject) => {

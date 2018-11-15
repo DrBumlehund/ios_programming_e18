@@ -36,9 +36,9 @@ router.get('/leaderboard', (req, res) => {
     });
 });
 
-router.get('/leaderboard/local', (req, res) => {
+router.get('/leaderboard/local/:location', (req, res) => {
     var offset = req.query.offset || 0;
-    var location = req.query.location;
+    var location = req.params.location;
     db.get_local_leaderboard(offset, location)
     .catch((reason) =>{
         res.statusCode = 400
@@ -49,10 +49,23 @@ router.get('/leaderboard/local', (req, res) => {
     });
 });
 
-router.get('/leaderboard/phone', (req, res) => {
+router.get('/leaderboard/phone/:phone', (req, res) => {
     var offset = req.query.offset || 0;
-    var phone = req.query.phone;
+    var phone = req.params.phone;
     db.get_phone_leaderboard(offset, phone)
+    .catch((reason) =>{
+        res.statusCode = 400
+        res.send(reason)
+    })
+    .then((result) => {
+        res.send(result);
+    });
+});
+
+router.get('/leaderboard/persnal/:device_token', (req, res) => {
+    var offset = req.query.offset || 0;
+    var device_token = req.params.device_token;
+    db.get_personal_leaderboard(offset, device_token)
     .catch((reason) =>{
         res.statusCode = 400
         res.send(reason)
